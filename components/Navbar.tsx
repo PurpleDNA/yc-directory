@@ -54,7 +54,7 @@ const Navbar = async () => {
         <div className="flex items-center gap-5 text-black">
           {session && session?.user ? (
             <>
-              <Link href="startup/create" className="cursor-pointer">
+              <Link href="create" className="cursor-pointer">
                 <span>Create</span>
               </Link>
               <form action={LogOut}>
