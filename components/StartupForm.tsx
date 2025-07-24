@@ -1,18 +1,82 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import React from "react";
 import MDEditor from "@uiw/react-md-editor";
+import { Button } from "./ui/button";
+import { Send } from "lucide-react";
+import { formSchema } from "@/lib/validation";
+import { z } from "zod";
+import { toast } from "../hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { createStartup } from "@/lib/actions";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [pitch, setPitch] = useState("");
+  const router = useRouter();
+  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+    try {
+      const formValues = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        category: formData.get("category") as string,
+        link: formData.get("link") as string,
+        pitch,
+      };
 
-  const [pitch, setPitch] = useState("**Hello world!!!**");
+      await formSchema.parseAsync(formValues);
+
+      const result = await createStartup(prevState, formData, pitch);
+      // console.log(result)
+
+      if (result.status === "SUCCESS") {
+        toast({
+          title: "Success",
+          description: "Your Startup Pitch has been created successfully",
+        });
+        router.push(`/startup/${result.data._id}`);
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      if (error instanceof z.ZodError) {
+        const fieldErorrs = error.flatten().fieldErrors;
+        console.log(fieldErorrs);
+
+        setErrors(fieldErorrs as unknown as Record<string, string>);
+
+        toast({
+          title: "Error",
+          description: "Please check your inputs and try again",
+          variant: "destructive",
+        });
+
+        return { ...prevState, error: "Validation failed", status: "ERROR" };
+      }
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+
+      return {
+        ...prevState,
+        error: "An unexpected error occured",
+        status: "ERROR",
+      };
+    }
+  };
+  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
+    error: "",
+    status: "initial",
+  });
+  console.log(state);
   return (
-    <form action={() => {}} className="startup-form">
+    <form action={formAction} className="startup-form">
       <div>
-        <label htmlFor="title" className="startup-form_label">
+        <label htmlFor="title" className="startup-form_label mb-4">
           Title
         </label>
         <Input
@@ -29,7 +93,7 @@ const StartupForm = () => {
         <Textarea
           id="description"
           name="description"
-          className="startup-form_textaread"
+          className="startup-form_textarea"
           required
           placeholder="Startup Description"
         />
@@ -61,13 +125,30 @@ const StartupForm = () => {
         />
         {errors.link && <p className="startup-form_error">{errors.link}</p>}
       </div>
-      <div className="container">
+      <div className="container" data-color-mode="light">
         <MDEditor
           value={pitch}
           onChange={(value) => setPitch(value as string)}
+          id="pitch"
+          preview="edit"
+          height={300}
+          style={{ overflow: "hidden", borderRadius: 20 }}
+          textareaProps={{
+            placeholder:
+              "Briefly Describe Your Idea and What Problem It Solves",
+          }}
+          previewOptions={{ disallowedElements: ["style"] }}
         />
-        <MDEditor.Markdown source={pitch} style={{ whiteSpace: "pre-wrap" }} />
+        {errors.pitch && <p className="startup-form_error">{errors.pitch}</p>}
       </div>
+      <Button
+        type="submit"
+        className="startup-form_btn text-white"
+        disabled={isPending}
+      >
+        {isPending ? "Submitting..." : "Submit Your Startup"}
+        <Send className="size-6 ml-2" />
+      </Button>
     </form>
   );
 };
