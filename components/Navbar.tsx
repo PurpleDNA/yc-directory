@@ -80,7 +80,9 @@ const Navbar = async () => {
           ) : (
             <form action={LogIn}>
               <button type="submit" className="cursor-pointer">
-                <span>Login</span>
+                <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100">
+                  Login
+                </button>
               </button>
             </form>
           )}
