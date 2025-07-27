@@ -32,6 +32,11 @@ export const FETCH_STARTUP_BY_ID =
   pitch,
   }`);
 
+export const FETCH_AUTHOR_BY_ID =
+  defineQuery(`*[_type == "author" && id == $id][0]{
+  _id
+  }`);
+
 export const STARTUPS_VIEWS_QUERY =
   defineQuery(`*[_type == "startup" && _id == $id][0]{
    _id,views

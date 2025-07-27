@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 const Navbar = async () => {
   const session: Session | null = await auth();
-
+  console.log(session);
   // async function LogOut() {
   //   "use server";
   //   signOut();
@@ -54,16 +54,27 @@ const Navbar = async () => {
         <div className="flex items-center gap-5 text-black">
           {session && session?.user ? (
             <>
-              <Link href="create" className="cursor-pointer">
-                <span>Create</span>
+              <Link href="/create" className="cursor-pointer">
+                <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100">
+                  Create
+                </button>
               </Link>
               <form action={LogOut}>
-                <button type="submit" className="cursor-pointer">
-                  <span>Logout</span>
+                <button
+                  type="submit"
+                  className="cursor-pointer py-1 px-2 rounded-sm text-white-100 bg-[#EE2B69]"
+                >
+                  <span className="font-bold">Logout</span>
                 </button>
               </form>
               <Link href={`/user/${session?.user.id}`}>
-                <span>{session?.user?.name}</span>
+                <Image
+                  alt="user image"
+                  width={48}
+                  height={48}
+                  src={session?.user.image ?? "https://placehold.co/48x48"}
+                  className="rounded-full"
+                />
               </Link>
             </>
           ) : (

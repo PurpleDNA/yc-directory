@@ -30,11 +30,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <p className="sub-heading !max-w-5xl">{startup.description}</p>
       </section>
       <section className="section_container">
-        <img
-          src={startup.image_url}
-          alt="thumbnail"
-          className="w-full h-auto max-h-[400px] rounded-xl"
-        />
+        <div className="max-w-4xl mx-auto">
+          <img
+            src={startup.image_url}
+            alt="thumbnail"
+            className="w-full h-auto max-h-[400px] rounded-xl"
+          />
+        </div>
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
           <div className="flex-between gap-5">
             <Link
@@ -60,7 +62,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           <h3 className="text-30-bold">Pitch Details</h3>
           {parsed_result ? (
             <article
-              className="prose font-work-sans break-all max-w-4xl "
+              className="prose font-work-sans break-all max-w-4xl whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: parsed_result }}
             />
           ) : (

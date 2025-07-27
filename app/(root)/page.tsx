@@ -11,8 +11,9 @@ export default async function Home({ searchParams }: HomeProps) {
   const query = (await searchParams).query;
   const params = { search: query || null };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const session = await auth();
-  console.log("Session:", session?.id);
+  console.log("Session:", session);
 
   const { data: startups } = await sanityFetch({
     query: STARTUPS_QUERY,

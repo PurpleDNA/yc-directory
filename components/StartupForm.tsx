@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState, useActionState } from "react";
@@ -27,17 +28,19 @@ const StartupForm = () => {
         pitch,
       };
 
+      console.log(formData);
+
       await formSchema.parseAsync(formValues);
 
       const result = await createStartup(prevState, formData, pitch);
-      // console.log(result)
+      console.log(result);
 
       if (result.status === "SUCCESS") {
         toast({
           title: "Success",
           description: "Your Startup Pitch has been created successfully",
         });
-        router.push(`/startup/${result.data._id}`);
+        router.push(`/startup/${result._id}`);
       }
     } catch (error) {
       console.error("Form submission error:", error);
@@ -72,7 +75,6 @@ const StartupForm = () => {
     error: "",
     status: "initial",
   });
-  console.log(state);
   return (
     <form action={formAction} className="startup-form">
       <div>
