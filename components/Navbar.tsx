@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 
 const Navbar = async () => {
   const session: Session | null = await auth();
-  console.log(session);
   // async function LogOut() {
   //   "use server";
   //   signOut();
@@ -79,10 +78,11 @@ const Navbar = async () => {
             </>
           ) : (
             <form action={LogIn}>
-              <button type="submit" className="cursor-pointer">
-                <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100">
-                  Login
-                </button>
+              <button
+                type="submit"
+                className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100 cursor-pointer"
+              >
+                Login
               </button>
             </form>
           )}

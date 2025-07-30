@@ -1,7 +1,6 @@
-import { auth } from "@/auth";
 import SearchForm from "@/components/SearchForm";
 import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
-import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { STARTUPS_QUERY } from "@/sanity/lib/query";
 interface HomeProps {
   searchParams: Promise<{ query?: string }>;
@@ -11,14 +10,9 @@ export default async function Home({ searchParams }: HomeProps) {
   const query = (await searchParams).query;
   const params = { search: query || null };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const session = await auth();
-  console.log("Session:", session);
-
-  const { data: startups } = await sanityFetch({
-    query: STARTUPS_QUERY,
-    params,
-  });
+  console.log(params);
+  const startups = await client.fetch(STARTUPS_QUERY, params);
+  console.log("Startups:", startups);
 
   return (
     <>
@@ -46,8 +40,6 @@ export default async function Home({ searchParams }: HomeProps) {
           )}
         </ul>
       </section>
-
-      <SanityLive />
     </>
   );
 }

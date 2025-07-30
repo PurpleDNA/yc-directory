@@ -68,7 +68,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={workSans.variable}>
-      <body className="">
+      <body className="" suppressHydrationWarning={true}>
         {children}
         <Toaster />
       </body>
