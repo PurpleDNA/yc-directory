@@ -54,7 +54,7 @@ const Navbar = async () => {
         <div className="flex items-center gap-5 text-black">
           {session && session?.user ? (
             <>
-              <Link href="/create" className="cursor-pointer">
+              <Link href="/create" className="cursor-pointer" prefetch={true}>
                 <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100">
                   Create
                 </button>

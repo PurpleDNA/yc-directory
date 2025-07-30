@@ -36,7 +36,6 @@ export default async function Home({ searchParams }: HomeProps) {
         <p className="text-30-semibold">
           {query ? `Search results for "${query}"` : "All Startups"}
         </p>
-
         <ul className="mt-7 card_grid">
           {startups?.length > 0 ? (
             startups.map((post: StartupTypeCard) => (

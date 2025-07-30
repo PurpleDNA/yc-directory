@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { formatDate } from "@/lib/utils";
 import React from "react";
 import { EyeIcon } from "lucide-react";
@@ -19,7 +20,6 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
           <span className="text-16-medium">{post.views}</span>
         </div>
       </div>
-
       <div className="flex-between mt-5 gap-5">
         <div className="flex-1">
           <Link href={`/user/${post.author?._id}`}>
