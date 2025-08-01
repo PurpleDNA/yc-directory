@@ -1,4 +1,4 @@
 {
-  "installCommand": "nnpm install --legacy-peer-deps --no-optional",
+  "installCommand": "npm install --legacy-peer-deps --no-optional",
   "buildCommand": "npm run build"
 }
