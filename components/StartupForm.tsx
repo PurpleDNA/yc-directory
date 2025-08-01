@@ -15,12 +15,6 @@ import { useRouter } from "next/navigation";
 import { createStartup } from "@/lib/actions";
 
 const StartupForm = () => {
-  toast({
-    title: "Error",
-    description: "Please check your inputs and try again",
-    variant: "destructive",
-  });
-
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pitch, setPitch] = useState("");
   const router = useRouter();
