@@ -31,7 +31,7 @@ export const FETCH_STARTUP_BY_ID =
   pitch,
   }`);
 
-export const FETCH_AUTHOR_BY_ID =
+export const FETCH_AUTHOR_USER_ID =
   defineQuery(`*[_type == "author" && id == $id][0]{
   _id
   }`);
@@ -48,5 +48,6 @@ export const AUTHOR_BY_GITHUB_ID_QUERY =
   username,
   email,
   image,
-  bio
+  bio,
+  name
   }`);

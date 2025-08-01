@@ -10,9 +10,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const query = (await searchParams).query;
   const params = { search: query || null };
 
-  console.log(params);
   const startups = await client.fetch(STARTUPS_QUERY, params);
-  console.log("Startups:", startups);
 
   return (
     <>

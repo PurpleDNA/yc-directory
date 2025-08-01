@@ -66,7 +66,7 @@ const Navbar = async () => {
                   <span className="font-bold">Logout</span>
                 </button>
               </form>
-              <Link href={`/user/${session?.user.id}`}>
+              <Link href={`/user/${session?.id}`}>
                 <Image
                   alt="user image"
                   width={48}

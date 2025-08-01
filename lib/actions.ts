@@ -5,12 +5,12 @@ import { auth } from "@/auth";
 import { parseServerActionResponse } from "./utils";
 import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/writeClient";
-import { FETCH_AUTHOR_BY_ID } from "@/sanity/lib/query";
+import { FETCH_AUTHOR_USER_ID } from "@/sanity/lib/query";
 import { client } from "@/sanity/lib/client";
 
-const getAuthorId = async (id: string) => {
+export const getAuthorId = async (id: string) => {
   const nId = Number(id);
-  const author = await client.fetch(FETCH_AUTHOR_BY_ID, {
+  const author = await client.fetch(FETCH_AUTHOR_USER_ID, {
     id: nId, // Match the parameter name in the query
   });
 
@@ -18,6 +18,7 @@ const getAuthorId = async (id: string) => {
     throw new Error(`Author with id ${id} not found`);
   }
 
+  console.log(author._id);
   return author._id; // Return just the _id string
 };
 
