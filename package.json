@@ -10,6 +10,7 @@
     "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate",
     "predev": "npm run typegen",
     "prebuild": "npm run typegen"
+    "vercel-build": "rm -rf node_modules package-lock.json && npm install && npm run build"
   },
   "packageManager": "npm@11.0.0",
   "overrides": {
