@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install --force --legacy-peer-deps --no-optional",
+  "installCommand": "npm install easymde && npm install --legacy-peer-deps",
   "buildCommand": "npm run build"
 }
