@@ -4,6 +4,7 @@ import Image from "next/image";
 import { auth, signIn, signOut } from "@/auth";
 import type { Session } from "next-auth";
 import { redirect } from "next/navigation";
+import { BadgePlus, LogOutIcon } from "lucide-react";
 
 const Navbar = async () => {
   const session: Session | null = await auth();
@@ -54,19 +55,27 @@ const Navbar = async () => {
           {session && session?.user ? (
             <>
               <Link href="/create" className="cursor-pointer" prefetch={true}>
-                <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100">
+                <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100 hidden md:block cursor-pointer">
                   Create
                 </button>
+                <BadgePlus
+                  className="md:hidden p-1 rounded-full bg-[#EE2B69] text-white cursor-pointer"
+                  size={30}
+                />
               </Link>
               <form action={LogOut}>
                 <button
                   type="submit"
-                  className="cursor-pointer py-1 px-2 rounded-sm text-white-100 bg-[#EE2B69]"
+                  className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100 hidden md:block cursor-pointer"
                 >
-                  <span className="font-bold">Logout</span>
+                  Logout
                 </button>
+                <LogOutIcon
+                  className="md:hidden p-1 rounded-full bg-[#EE2B69] text-white cursor-pointer"
+                  size={30}
+                />
               </form>
-              <Link href={`/user/${session?.id}`}>
+              <Link href={`/user/${session?.id}`} prefetch={true}>
                 <Image
                   alt="user image"
                   width={48}

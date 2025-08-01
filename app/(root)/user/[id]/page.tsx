@@ -4,9 +4,12 @@ import { AUTHOR_BY_GITHUB_ID_QUERY } from "@/sanity/lib/query";
 import { notFound } from "next/navigation";
 import React from "react";
 import Image from "next/image";
+import { auth } from "@/auth";
+import UserStartups from "@/components/UserStartups";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const id = Number(params.id);
+  const id = await Number(params.id);
+  const session = await auth();
 
   const user = await client.fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
     id,
@@ -33,7 +36,13 @@ const page = async ({ params }: { params: { id: string } }) => {
           <p className="mt-1 text-center text-14-normal">{user?.bio}</p>
         </div>
         <div className="flex-1 flex flex-col gap-5 lg:mt-5">
-          <p className="text-30-bold"></p>
+          <p className="text-30-bold">
+            {Number(session?.id) === id ? "Your" : "All"} Startups
+          </p>
+          <ul className="card_grid-sm">
+            {/*TODO: ADD USER_STARTUPS */}
+            <UserStartups id={id} />
+          </ul>
         </div>
       </section>
     </>
