@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install easymde react-is @esbuild/linux-x64 && npm install --legacy-peer-deps --force --no-optional",
+  "installCommand": "npm install",
   "buildCommand": "npm run build"
 }
