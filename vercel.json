@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install --force --no-optional",
+  "installCommand": "rm -rf package-lock.json && npm install easymde && npm install --legacy-peer-deps --force --no-optional",
   "buildCommand": "npm run build"
 }
