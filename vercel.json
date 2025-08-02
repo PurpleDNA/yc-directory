@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install --force --no-optional",
+  "installCommand": "npm install next@canary && npm install --force --no-optional",
   "buildCommand": "npm run build"
 }
