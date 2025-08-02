@@ -7,8 +7,8 @@ import Image from "next/image";
 import { auth } from "@/auth";
 import UserStartups from "@/components/UserStartups";
 
-const page = async ({ params }: { params: { id: string } }) => {
-  const id = await Number(params.id);
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const id = Number((await params).id);
   const session = await auth();
 
   const user = await client.fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
