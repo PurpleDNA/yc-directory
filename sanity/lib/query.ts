@@ -52,6 +52,17 @@ export const AUTHOR_BY_GITHUB_ID_QUERY =
   name
   }`);
 
+export const AUTHOR_BY_OAUTH_EMAIL_QUERY =
+  defineQuery(`*[_type == "author" && email == $email][0]{
+  _id,
+  id,
+  username,
+  email,
+  image,
+  bio,
+  name
+  }`);
+
 export const STARTUPS_BY_USER_QUERY =
   defineQuery(`*[_type == "startup" && defined(slug.current) && author->id == $id] | order(_createdAt desc){
   _id,

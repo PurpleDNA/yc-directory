@@ -12,6 +12,19 @@ export const author = defineType({
       type: "number",
     }),
     defineField({
+      name: "account",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { type: "provider", name: "title" },
+            { type: "providerAccountId", name: "amount" },
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: "name",
       type: "string",
     }),

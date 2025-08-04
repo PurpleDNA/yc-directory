@@ -2,7 +2,10 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { client } from "./sanity/lib/client";
-import { AUTHOR_BY_GITHUB_ID_QUERY } from "./sanity/lib/query";
+import {
+  AUTHOR_BY_GITHUB_ID_QUERY,
+  AUTHOR_BY_OAUTH_EMAIL_QUERY,
+} from "./sanity/lib/query";
 import { writeClient } from "./sanity/lib/writeClient";
 
 const config: NextAuthConfig = {
@@ -17,13 +20,35 @@ const config: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async signIn({ user: { name, email, image }, profile }) {
+    async signIn({ user: { name, email, image }, profile, account }) {
+      const provider = account?.provider;
+      const providerAccountId = account?.providerAccountId;
+
       const existingUser = await client
         .withConfig({ useCdn: false })
-        .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
-          id: profile?.id,
+        .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
+          email,
         });
-      if (!existingUser) {
+
+      if (existingUser) {
+        const hasProviderLinked = existingUser.accounts?.some(
+          (acct: { provider: "string"; providerAccountId: "string" }) =>
+            acct.provider === provider &&
+            acct.providerAccountId === providerAccountId
+        );
+
+        if (!hasProviderLinked) {
+          // Step 2: Link new provider to the existing user
+          await writeClient
+            .patch(existingUser._id)
+            .setIfMissing({ accounts: [] })
+            .append("accounts", [{ provider, providerAccountId }])
+            .commit();
+        }
+
+        // ✅ Allow sign-in
+        return true;
+      } else {
         await writeClient.create({
           _type: "author",
           id: profile?.id,
@@ -33,8 +58,9 @@ const config: NextAuthConfig = {
           image,
           bio: profile?.bio || "",
         });
+
+        return true;
       }
-      return true;
     },
     async jwt({ token, account, profile }) {
       if (account && profile) {
