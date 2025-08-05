@@ -41,7 +41,7 @@ const config: NextAuthConfig = {
           // Step 2: Link new provider to the existing user
           await writeClient
             .patch(existingUser._id)
-            .setIfMissing({ accounts: [] })
+            .setIfMissing({ account: [] })
             .append("account", [
               { provider, providerAccountId, _key: providerAccountId },
             ])
