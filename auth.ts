@@ -42,7 +42,9 @@ const config: NextAuthConfig = {
           await writeClient
             .patch(existingUser._id)
             .setIfMissing({ accounts: [] })
-            .append("account", [{ provider, providerAccountId }])
+            .append("account", [
+              { provider, providerAccountId, _key: providerAccountId },
+            ])
             .commit();
         }
 
