@@ -1,12 +1,12 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { client } from "./sanity/lib/client";
-import {
-  AUTHOR_BY_GITHUB_ID_QUERY,
-  AUTHOR_BY_OAUTH_EMAIL_QUERY,
-} from "./sanity/lib/query";
-import { writeClient } from "./sanity/lib/writeClient";
+// import { client } from "./sanity/lib/client";
+// import {
+//   AUTHOR_BY_GITHUB_ID_QUERY,
+//   AUTHOR_BY_OAUTH_EMAIL_QUERY,
+// } from "./sanity/lib/query";
+// import { writeClient } from "./sanity/lib/writeClient";
 
 const config: NextAuthConfig = {
   providers: [
@@ -19,70 +19,71 @@ const config: NextAuthConfig = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  callbacks: {
-    async signIn({ user: { name, email, image }, profile, account }) {
-      const provider = account?.provider;
-      const providerAccountId = account?.providerAccountId;
+  // callbacks: {
+  //   async signIn({ user: { name, email, image }, profile, account }) {
 
-      const existingUser = await client
-        .withConfig({ useCdn: false })
-        .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
-          email,
-        });
+  //     const provider = account?.provider;
+  //     const providerAccountId = account?.providerAccountId;
 
-      if (existingUser) {
-        const hasProviderLinked = existingUser.accounts?.some(
-          (acct: { provider: "string"; providerAccountId: "string" }) =>
-            acct.provider === provider &&
-            acct.providerAccountId === providerAccountId
-        );
+  //     const existingUser = await client
+  //       .withConfig({ useCdn: false })
+  //       .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
+  //         email,
+  //       });
 
-        if (!hasProviderLinked) {
-          // Step 2: Link new provider to the existing user
-          await writeClient
-            .patch(existingUser._id)
-            .setIfMissing({ accounts: [] })
-            .append("accounts", [{ provider, providerAccountId }])
-            .commit();
-        }
+  //     if (existingUser) {
+  //       const hasProviderLinked = existingUser.accounts?.some(
+  //         (acct: { provider: "string"; providerAccountId: "string" }) =>
+  //           acct.provider === provider &&
+  //           acct.providerAccountId === providerAccountId
+  //       );
 
-        // ✅ Allow sign-in
-        return true;
-      } else {
-        await writeClient.create({
-          _type: "author",
-          id: profile?.id,
-          name,
-          username: profile?.login,
-          email,
-          image,
-          bio: profile?.bio || "",
-        });
+  //       if (!hasProviderLinked) {
+  //         // Step 2: Link new provider to the existing user
+  //         await writeClient
+  //           .patch(existingUser._id)
+  //           .setIfMissing({ accounts: [] })
+  //           .append("accounts", [{ provider, providerAccountId }])
+  //           .commit();
+  //       }
 
-        return true;
-      }
-    },
-    async jwt({ token, account, profile }) {
-      if (account && profile) {
-        const user = await client
-          .withConfig({ useCdn: false })
-          .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
-            id: profile?.id,
-          });
-        token.id = user?.id;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      Object.assign(session, { id: token.id });
-      return session;
-    },
-  },
+  //       // ✅ Allow sign-in
+  //       return true;
+  //     }
+  //     await writeClient.create({
+  //       _type: "author",
+  //       id: profile?.id,
+  //       name,
+  //       username: profile?.login,
+  //       email,
+  //       image,
+  //       bio: profile?.bio || "",
+  //     });
+
+  //     return true;
+  //   },
+  //   async jwt({ token, account, profile }) {
+  //     if (account && profile) {
+  //       const user = await client
+  //         .withConfig({ useCdn: false })
+  //         .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
+  //           id: profile?.id,
+  //         });
+  //       token.id = user?.id;
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     Object.assign(session, { id: token.id });
+  //     return session;
+  //   },
+  // },
   pages: {
     signIn: "/", // Redirect to home on sign in
     error: "/", // Redirect to home on error (like cancel)
   },
-  debug: true,
+  trustHost: true, // Important for localhost
+  debug: process.env.NODE_ENV === "development", // Enable debug in dev
   //   callbacks: {
   //     session({ session, token }) {
   //       if (token?.sub && session?.user) {

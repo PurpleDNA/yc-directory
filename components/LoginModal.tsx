@@ -84,7 +84,10 @@ const LoginModal = () => {
         <div className="buttons-container">
           <button
             className="auth-btn google-btn"
-            onClick={() => LogIn("google")}
+            onClick={() => {
+              handleCloseModal(); // Close modal before redirect
+              LogIn("google");
+            }}
             type="button"
           >
             <svg className="btn-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -110,7 +113,10 @@ const LoginModal = () => {
 
           <button
             className="auth-btn github-btn"
-            onClick={() => LogIn("github")}
+            onClick={() => {
+              handleCloseModal(); // Close modal before redirect
+              LogIn("github");
+            }}
             type="button"
           >
             <svg className="btn-icon" viewBox="0 0 24 24" fill="currentColor">
