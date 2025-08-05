@@ -59,7 +59,7 @@ const config: NextAuthConfig = {
         email,
         image,
         bio: profile?.bio || "",
-        account: [{ provider, providerAccountId }],
+        account: [{ provider, providerAccountId, _key: providerAccountId }],
       });
 
       return true;
