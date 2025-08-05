@@ -18,8 +18,8 @@ export const author = defineType({
         {
           type: "object",
           fields: [
-            { type: "provider", name: "title" },
-            { type: "providerAccountId", name: "amount" },
+            { type: "string", name: "provider" },
+            { type: "string", name: "providerAccountId" },
           ],
         },
       ],

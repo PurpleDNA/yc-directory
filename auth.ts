@@ -15,8 +15,8 @@ const config: NextAuthConfig = {
       clientSecret: process.env.GITHUB_SECRET!,
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
@@ -82,6 +82,7 @@ const config: NextAuthConfig = {
     signIn: "/", // Redirect to home on sign in
     error: "/", // Redirect to home on error (like cancel)
   },
+  debug: true,
   //   callbacks: {
   //     session({ session, token }) {
   //       if (token?.sub && session?.user) {

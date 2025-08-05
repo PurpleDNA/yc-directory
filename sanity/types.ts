@@ -58,6 +58,11 @@ export type Author = {
   _updatedAt: string;
   _rev: string;
   id?: number;
+  account?: Array<{
+    provider?: string;
+    providerAccountId?: string;
+    _key: string;
+  }>;
   name?: string;
   username?: string;
   email?: string;

@@ -7,6 +7,13 @@ import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/writeClient";
 import { FETCH_AUTHOR_USER_ID } from "@/sanity/lib/query";
 import { client } from "@/sanity/lib/client";
+import {
+  // auth,
+  signIn,
+  signOut,
+} from "@/auth";
+// import type { Session } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const getAuthorId = async (id: string) => {
   const nId = Number(id);
@@ -76,3 +83,71 @@ export const createStartup = async (
     };
   }
 };
+
+export async function LogIn(provider: string) {
+  "use server";
+
+  // Validate provider
+  const validProviders = ["google", "github"];
+  if (!validProviders.includes(provider)) {
+    console.error(`Invalid provider: ${provider}`);
+    redirect("/?error=InvalidProvider");
+    return;
+  }
+
+  // Log environment variables (remove in production)
+  console.log("Environment check:", {
+    hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
+    hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+    hasGitHubClientId: !!process.env.GITHUB_CLIENT_ID,
+    hasGitHubClientSecret: !!process.env.GITHUB_CLIENT_SECRET,
+    hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
+    nextAuthUrl: process.env.NEXTAUTH_URL,
+  });
+
+  try {
+    console.log(`Attempting to sign in with ${provider}`);
+
+    // Call signIn with explicit redirect
+    await signIn(provider, {
+      redirectTo: "/",
+      redirect: true,
+    });
+  } catch (error) {
+    console.error("Sign in error details:", {
+      error,
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : "No stack trace",
+      provider,
+      errorType: typeof error,
+      errorConstructor: error?.constructor?.name,
+    });
+
+    // Handle the redirect that NextAuth throws (this is normal behavior)
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      console.log("NextAuth redirect (normal behavior)");
+      throw error;
+    }
+
+    // Handle AuthError specifically
+    if (error && typeof error === "object" && "type" in error) {
+      console.error("NextAuth specific error:", error);
+    }
+
+    // For any other errors, redirect with error message
+    redirect("/?error=SignInFailed");
+  }
+}
+
+export async function LogOut() {
+  "use server";
+  try {
+    await signOut({ redirectTo: "/" });
+  } catch (error) {
+    // Handle the redirect that NextAuth throws
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      throw error;
+    }
+    console.error("Sign out error:", error);
+  }
+}
