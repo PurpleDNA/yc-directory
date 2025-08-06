@@ -8,23 +8,6 @@ export const author = defineType({
   icon: UserIcon,
   fields: [
     defineField({
-      name: "id",
-      type: "number",
-    }),
-    defineField({
-      name: "account",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { type: "string", name: "provider" },
-            { type: "string", name: "providerAccountId" },
-          ],
-        },
-      ],
-    }),
-    defineField({
       name: "name",
       type: "string",
     }),
@@ -43,6 +26,19 @@ export const author = defineType({
     defineField({
       name: "bio",
       type: "text",
+    }),
+    defineField({
+      name: "account",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { type: "string", name: "provider" },
+            { type: "string", name: "providerAccountId" },
+          ],
+        },
+      ],
     }),
   ],
   preview: {
