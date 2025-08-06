@@ -57,17 +57,16 @@ export type Author = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  id?: number;
-  account?: Array<{
-    provider?: string;
-    providerAccountId?: string;
-    _key: string;
-  }>;
   name?: string;
   username?: string;
   email?: string;
   image?: string;
   bio?: string;
+  account?: Array<{
+    provider?: string;
+    providerAccountId?: string;
+    _key: string;
+  }>;
 };
 
 export type Markdown = string;
