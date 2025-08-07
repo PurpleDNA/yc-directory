@@ -31,6 +31,27 @@ const LoginModal = () => {
     [handleCloseModal]
   );
 
+  // Clean up URL on component mount - handles OAuth redirect back
+  useEffect(() => {
+    // If modal should show but we detect we just came back from OAuth
+    if (showModal) {
+      const timer = setTimeout(() => {
+        // Simple check: if page has been loaded for a bit and modal is still showing,
+        // user probably returned from OAuth - clean up the URL
+        const params = new URLSearchParams(searchParams.toString());
+        if (params.has("showLogin")) {
+          console.log(
+            "Cleaning up showLogin parameter after potential OAuth return"
+          );
+          params.delete("showLogin");
+          replace(`${pathname}?${params.toString()}`, { scroll: false });
+        }
+      }, 300); // Wait 300 milliseconds after page load
+
+      return () => clearTimeout(timer);
+    }
+  }, []); // Run only on component mount
+
   // Handle escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
@@ -84,9 +105,21 @@ const LoginModal = () => {
         <div className="buttons-container">
           <button
             className="auth-btn google-btn"
-            onClick={() => {
-              handleCloseModal(); // Close modal before redirect
-              LogIn("google");
+            onClick={async () => {
+              console.log("Google button clicked"); // Debug log
+              try {
+                handleCloseModal(); // Close modal before redirect
+                await LogIn("google");
+              } catch (error) {
+                console.log("Google login error caught in modal:", error);
+                // If it's a redirect error, don't handle it here
+                if (
+                  error instanceof Error &&
+                  error.message === "NEXT_REDIRECT"
+                ) {
+                  throw error;
+                }
+              }
             }}
             type="button"
           >
@@ -114,8 +147,20 @@ const LoginModal = () => {
           <button
             className="auth-btn github-btn"
             onClick={async () => {
-              handleCloseModal(); // Close modal before redirect
-              LogIn("github");
+              console.log("GitHub button clicked"); // Debug log
+              try {
+                handleCloseModal(); // Close modal before redirect
+                await LogIn("github");
+              } catch (error) {
+                console.log("GitHub login error caught in modal:", error);
+                // If it's a redirect error, don't handle it here
+                if (
+                  error instanceof Error &&
+                  error.message === "NEXT_REDIRECT"
+                ) {
+                  throw error;
+                }
+              }
             }}
             type="button"
           >
