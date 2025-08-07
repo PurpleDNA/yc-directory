@@ -84,8 +84,8 @@ const LoginModal = () => {
         <div className="buttons-container">
           <button
             className="auth-btn google-btn"
-            onClick={async () => {
-              await handleCloseModal(); // Close modal before redirect
+            onClick={() => {
+              handleCloseModal(); // Close modal before redirect
               LogIn("google");
             }}
             type="button"
@@ -114,7 +114,7 @@ const LoginModal = () => {
           <button
             className="auth-btn github-btn"
             onClick={async () => {
-              await handleCloseModal(); // Close modal before redirect
+              handleCloseModal(); // Close modal before redirect
               LogIn("github");
             }}
             type="button"
