@@ -53,9 +53,8 @@ const config: NextAuthConfig = {
       }
       await writeClient.create({
         _type: "author",
-        id: profile?.id,
         name,
-        username: profile?.login,
+        username: provider === "google" ? name : profile?.login,
         email,
         image,
         bio: profile?.bio || "",
