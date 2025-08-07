@@ -58,7 +58,8 @@ export const AUTHOR_BY_OAUTH_EMAIL_QUERY =
   email,
   image,
   bio,
-  name
+  name,
+  account
   }`);
 
 export const STARTUPS_BY_USER_QUERY =

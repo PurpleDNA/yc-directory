@@ -3,9 +3,9 @@ import React, { Suspense } from "react";
 import { client } from "@/sanity/lib/client";
 import {
   FETCH_STARTUP_BY_ID,
-  PLAYLIST_BY_SLUG_QUERY,
+  // PLAYLIST_BY_SLUG_QUERY,
 } from "@/sanity/lib/query";
-import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
+// import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
 import { notFound } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
@@ -18,17 +18,12 @@ import View from "@/components/View";
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
 
-  const [startup, { select: editorPosts }] = await Promise.all([
+  const [startup] = await Promise.all([
     client.fetch(FETCH_STARTUP_BY_ID, {
       id,
     }),
-    client.fetch(PLAYLIST_BY_SLUG_QUERY, {
-      slug: "editor-picks",
-    }),
   ]);
   if (!startup) notFound();
-
-  console.log("Editor Picks: ", editorPosts);
 
   const md = markdownit();
   const parsed_result = md.render(startup?.pitch || "");
@@ -81,7 +76,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           )}
         </div>
         <hr className="didvide" />
-        {editorPosts?.length > 0 && (
+        {/* {editorPosts?.length > 0 && (
           <div className="max-w-4xl mx-auto">
             <p className="text-30-semibold">Editor Picks</p>
 
@@ -91,7 +86,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
         <Suspense fallback={<Skeleton className="view_skeleton" />}>
           <View id={id} />
         </Suspense>

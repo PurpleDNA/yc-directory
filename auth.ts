@@ -24,7 +24,7 @@ const config: NextAuthConfig = {
       const existingUser = await client
         .withConfig({ useCdn: false })
         .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
-          email,
+          email: profile?.email,
         });
 
       if (existingUser) {
@@ -60,12 +60,12 @@ const config: NextAuthConfig = {
 
       return true;
     },
-    async jwt({ token, account, profile, user: { email } }) {
+    async jwt({ token, account, profile }) {
       if (account && profile) {
         const user = await client
           .withConfig({ useCdn: false })
           .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
-            email,
+            email: profile.email,
           });
         token.id = user?._id;
       }
@@ -81,7 +81,7 @@ const config: NextAuthConfig = {
     error: "/", // Redirect to home on error (like cancel)
   },
   trustHost: true, // Important for localhost
-  debug: process.env.NODE_ENV === "development", // Enable debug in dev
+  // debug: process.env.NODE_ENV === "development", // Enable debug in dev
   //   callbacks: {
   //     session({ session, token }) {
   //       if (token?.sub && session?.user) {
