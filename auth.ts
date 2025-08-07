@@ -28,7 +28,7 @@ const config: NextAuthConfig = {
         });
 
       if (existingUser) {
-        const hasProviderLinked = existingUser.accounts?.some(
+        const hasProviderLinked = existingUser.account?.some(
           (acct: { provider: "string"; providerAccountId: "string" }) =>
             acct.provider === provider &&
             acct.providerAccountId === providerAccountId
@@ -67,7 +67,7 @@ const config: NextAuthConfig = {
           .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
             email,
           });
-        token.id = user?.id;
+        token.id = user?._id;
       }
       return token;
     },

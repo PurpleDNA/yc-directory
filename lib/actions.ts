@@ -49,7 +49,7 @@ export const createStartup = async (
 
   const slug = slugify(title as string, { lower: true, strict: true });
 
-  const authorId = await getAuthorId(session.id);
+  const authorId = session.id;
 
   try {
     const startup = {
