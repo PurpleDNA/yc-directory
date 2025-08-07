@@ -8,7 +8,7 @@ export const STARTUPS_QUERY =
   slug,
   _createdAt, 
   author -> {
-    _id,name,image,bio,id
+    _id,name,image,bio
   },
   views, 
   image_url,
