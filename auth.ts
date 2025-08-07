@@ -2,10 +2,7 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { client } from "./sanity/lib/client";
-import {
-  AUTHOR_BY_GITHUB_ID_QUERY,
-  AUTHOR_BY_OAUTH_EMAIL_QUERY,
-} from "./sanity/lib/query";
+import { AUTHOR_BY_OAUTH_EMAIL_QUERY } from "./sanity/lib/query";
 import { writeClient } from "./sanity/lib/writeClient";
 
 const config: NextAuthConfig = {
@@ -63,12 +60,12 @@ const config: NextAuthConfig = {
 
       return true;
     },
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile, user: { email } }) {
       if (account && profile) {
         const user = await client
           .withConfig({ useCdn: false })
-          .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
-            id: profile?.id,
+          .fetch(AUTHOR_BY_OAUTH_EMAIL_QUERY, {
+            email,
           });
         token.id = user?.id;
       }
