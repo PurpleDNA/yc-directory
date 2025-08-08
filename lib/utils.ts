@@ -16,3 +16,14 @@ export function formatDate(date: string) {
 export function parseServerActionResponse<T>(response: T) {
   return JSON.parse(JSON.stringify(response));
 }
+
+export function pagination<T>(array: T[]) {
+  const pages = [];
+  let num = 0;
+  for (let i = 0; i < array.length / 9; i++) {
+    const split = array.slice(num, num + 9);
+    pages.push(split);
+    num = num + 9;
+  }
+  return pages;
+}
