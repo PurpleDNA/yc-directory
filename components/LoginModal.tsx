@@ -46,7 +46,7 @@ const LoginModal = () => {
           params.delete("showLogin");
           replace(`${pathname}?${params.toString()}`, { scroll: false });
         }
-      }, 300); // Wait 300 milliseconds after page load
+      }, 30); // Wait 30 milliseconds after page load
 
       return () => clearTimeout(timer);
     }
