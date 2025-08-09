@@ -7,10 +7,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Author, Startup } from "@/sanity/types";
+import imageUrlBuilder from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { client } from "@/sanity/lib/client";
 
-export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author };
+export type StartupTypeCard = Omit<Startup, "author" | "image"> & {
+  author?: Author;
+  image?: SanityImageSource;
+};
 
 const StartupCard = ({ post }: { post: StartupTypeCard }) => {
+  const builder = imageUrlBuilder(client);
+  function urlFor(source: SanityImageSource) {
+    return builder.image(source);
+  }
   return (
     <li className="group startup-card">
       <div className="flex-between">
@@ -45,7 +55,7 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
         <p className="startup-card_desc">{post.description}</p>
 
         <img
-          src={post.image_url}
+          src={post.image ? urlFor(post.image).url() : post.image_url}
           alt="placeholder"
           className="startup-card_img"
         />

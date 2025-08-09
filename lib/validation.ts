@@ -25,6 +25,6 @@ export const formSchema = z.object({
   //       return false;
   //     }
   //   }),
-  // image: imageSchema,
+  image: imageSchema,
   pitch: z.string().min(10),
 });

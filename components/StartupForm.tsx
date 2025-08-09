@@ -44,8 +44,11 @@ const StartupForm = () => {
         description: formData.get("description") as string,
         category: formData.get("category") as string,
         pitch,
-        // image: formData.get("image") as File | null,
+        image: formData.get("image") as File | null,
       };
+
+      console.log(imageFile);
+      console.log(formData.get("image"));
 
       await formSchema.parseAsync(formValues);
 

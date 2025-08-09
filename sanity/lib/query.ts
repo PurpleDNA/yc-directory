@@ -30,6 +30,7 @@ export const FETCH_STARTUP_BY_ID =
   category,
   image_url,
   pitch,
+  image
   }`);
 
 export const FETCH_AUTHOR_USER_ID =
