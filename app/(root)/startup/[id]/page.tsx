@@ -25,6 +25,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       id,
     }),
   ]);
+  console.log(startup);
   if (!startup) notFound();
 
   const md = markdownit();

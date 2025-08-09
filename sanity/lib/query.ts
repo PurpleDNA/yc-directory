@@ -12,7 +12,8 @@ export const STARTUPS_QUERY =
   },
   views, 
   image_url,
-  category
+  category,
+  image
 }`);
 
 export const FETCH_STARTUP_BY_ID =
