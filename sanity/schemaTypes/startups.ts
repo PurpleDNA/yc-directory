@@ -44,5 +44,14 @@ export const startup = defineType({
       name: "pitch",
       type: "markdown",
     }),
+    defineField({
+      name: "image",
+      title: "Startup Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
   ],
 });

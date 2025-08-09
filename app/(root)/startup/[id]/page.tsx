@@ -14,6 +14,8 @@ export const experimental_ppr = true;
 import markdownit from "markdown-it";
 import { Skeleton } from "@/components/ui/skeleton";
 import View from "@/components/View";
+import imageUrlBuilder from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -28,6 +30,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const md = markdownit();
   const parsed_result = md.render(startup?.pitch || "");
 
+  const builder = imageUrlBuilder(client);
+  function urlFor(source: SanityImageSource) {
+    return builder.image(source);
+  }
+
   return (
     <>
       <section className="pink_container !min-h-[230px]">
@@ -38,7 +45,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       <section className="section_container">
         <div className="max-w-4xl mx-auto">
           <img
-            src={startup.image_url}
+            src={urlFor(startup.image).url()}
             alt="thumbnail"
             className="w-full h-auto max-h-[400px] rounded-xl"
           />
