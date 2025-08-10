@@ -196,13 +196,6 @@
         },
         "optional": true
       },
-      "image_url": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
       "pitch": {
         "type": "objectAttribute",
         "value": {

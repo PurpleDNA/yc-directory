@@ -47,7 +47,6 @@ export type Startup = {
   views?: number;
   description?: string;
   category?: string;
-  image_url?: string;
   pitch?: string;
   image?: {
     asset?: {

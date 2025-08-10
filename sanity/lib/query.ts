@@ -10,8 +10,7 @@ export const STARTUPS_QUERY =
   author -> {
     _id,name,image,bio
   },
-  views, 
-  image_url,
+  views,
   category,
   image
 }`);
@@ -28,7 +27,6 @@ export const FETCH_STARTUP_BY_ID =
   views,
   description,
   category,
-  image_url,
   pitch,
   image
   }`);
@@ -75,7 +73,6 @@ export const STARTUPS_BY_USER_QUERY =
     _id,name,image,bio,id
   },
   views, 
-  image_url,
   category
 }`);
 
@@ -99,7 +96,6 @@ export const PLAYLIST_BY_SLUG_QUERY =
     views,
     description,
     category,
-    image_url,
     pitch
   }
 }`);

@@ -55,7 +55,11 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
         <p className="startup-card_desc">{post.description}</p>
 
         <img
-          src={post.image ? urlFor(post.image).url() : post.image_url}
+          src={
+            post.image
+              ? urlFor(post.image).url()
+              : "https://placehold.co/600x400"
+          }
           alt="placeholder"
           className="startup-card_img"
         />

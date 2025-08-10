@@ -33,37 +33,43 @@ export const createStartup = async (
   form: FormData,
   pitch: string
 ) => {
-  console.log("This is the formData nigga>>>>>>", form);
+  const session = await auth();
+  if (!session) {
+    return parseServerActionResponse({
+      error: "Not signed in",
+      status: "ERROR",
+    });
+  }
 
-  const { title, description, category, image } = Object.fromEntries(
+  const { title, description, category } = Object.fromEntries(
     Array.from(form).filter(([key]) => key !== "pitch")
   );
-  console.log("The array.fromEnteries Bullshit>>>>>>>", {
-    title,
-    description,
-    category,
-    image,
-  });
+
+  const imageFile = form.get("image") as File | null;
+  let imageRef = null;
+
+  if (imageFile && imageFile.size > 0) {
+    const asset = await writeClient.assets.upload("image", imageFile, {
+      filename: imageFile.name,
+    });
+
+    imageRef = {
+      _type: "image",
+      asset: {
+        _type: "reference",
+        _ref: asset._id,
+      },
+    };
+  }
 
   const slug = slugify(title as string, { lower: true, strict: true });
-  const link = "https://avatars.githubusercontent.com/u/138164488?v=4";
+  const authorId = session.id;
 
   try {
-    const session = await auth();
-    if (!session) {
-      return parseServerActionResponse({
-        error: "Not signed in",
-        status: "ERROR",
-      });
-    }
-
-    const authorId = session.id;
-
     const startup = {
       title,
       description,
       category,
-      image_url: link,
       slug: {
         _type: slug,
         current: slug,
@@ -73,7 +79,7 @@ export const createStartup = async (
         _ref: authorId,
       },
       pitch,
-      image,
+      image: imageRef,
     };
 
     const result = await writeClient.create({ _type: "startup", ...startup });
