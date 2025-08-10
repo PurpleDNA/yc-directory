@@ -11,7 +11,6 @@ const LoginModal = () => {
   const modalOverlayRef = useRef<HTMLDivElement>(null);
   const showModal = searchParams.get("showLogin") === "true";
 
-  // Handler to close the modal
   const handleCloseModal = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("showLogin");
@@ -20,10 +19,8 @@ const LoginModal = () => {
     replace(`${pathname}?${params.toString()}`, { scroll: false });
   }, [searchParams, pathname, replace]);
 
-  // Handle clicking outside the modal
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent) => {
-      // Only close if clicking on the overlay itself, not the modal content
       if (e.target === modalOverlayRef.current) {
         handleCloseModal();
       }
@@ -31,16 +28,11 @@ const LoginModal = () => {
     [handleCloseModal]
   );
 
-  // Clean up URL on component mount - handles OAuth redirect back
   useEffect(() => {
-    // If modal should show but we detect we just came back from OAuth
     if (showModal) {
       const timer = setTimeout(() => {
         const params = new URLSearchParams(searchParams.toString());
         if (params.has("showLogin")) {
-          console.log(
-            "Cleaning up showLogin parameter after potential OAuth return"
-          );
           params.delete("showLogin");
           replace(`${pathname}?${params.toString()}`, { scroll: false });
         }
@@ -70,7 +62,6 @@ const LoginModal = () => {
     };
   }, [showModal, handleCloseModal]);
 
-  // Don't render the modal if it shouldn't be shown
   if (!showModal) {
     return null;
   }
@@ -83,7 +74,6 @@ const LoginModal = () => {
       onClick={handleOverlayClick}
     >
       <div className="modal">
-        {/* Close Button */}
         <button
           className="close-btn"
           aria-label="Close modal"
@@ -93,19 +83,17 @@ const LoginModal = () => {
           ×
         </button>
 
-        {/* Modal Header */}
         <div className="modal-header">
           <h2 className="modal-title">Welcome back</h2>
           <p className="modal-subtitle">Sign in to your account to continue</p>
         </div>
 
-        {/* Auth Buttons */}
         <div className="buttons-container">
           <button
             className="auth-btn google-btn"
             onClick={async () => {
               try {
-                handleCloseModal(); // Close modal before redirect
+                handleCloseModal();
                 await LogIn("google");
               } catch (error) {
                 if (

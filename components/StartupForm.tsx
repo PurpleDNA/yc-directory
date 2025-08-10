@@ -13,6 +13,7 @@ import { z } from "zod";
 import { toast } from "../hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { createStartup } from "@/lib/actions";
+import { imageSchema } from "@/lib/validation";
 
 const StartupForm = () => {
   const router = useRouter();
@@ -28,8 +29,26 @@ const StartupForm = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setImageFile(file);
-    setImagePreview(file ? URL.createObjectURL(file) : null);
+
+    if (!file) return;
+
+    try {
+      imageSchema.parse(file);
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        console.log("Validation errors:", err.errors);
+        toast({
+          title: "Invalid Image",
+          description: err.errors.map((e) => e.message).join(", "),
+          variant: "destructive",
+        });
+      }
+      e.target.value = "";
+      setImageFile(null);
+      setImagePreview(null);
+    }
   };
 
   const handleFormSubmit = async (prevState: any) => {
@@ -47,7 +66,6 @@ const StartupForm = () => {
         description,
         category,
         pitch,
-        image: imageFile,
       };
 
       await formSchema.parseAsync(formValues);
@@ -68,6 +86,7 @@ const StartupForm = () => {
         });
       }
     } catch (error) {
+      console.log("startUp Form Error>>>>>>>>>>>>>: ", error);
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
         setErrors(fieldErrors as unknown as Record<string, string>);

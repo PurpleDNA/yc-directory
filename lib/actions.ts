@@ -88,7 +88,7 @@ export const createStartup = async <T>(
       status: "SUCCESS",
     });
   } catch (error) {
-    console.log(error);
+    console.log("createStartup Error>>>>>>>>>>>: ", error);
     // throw error;
     return {
       error: error,
@@ -100,7 +100,6 @@ export const createStartup = async <T>(
 export async function LogIn(provider: string) {
   "use server";
   try {
-    console.log(`Attempting to sign in with ${provider}`);
     await signIn(provider);
   } catch (error) {
     console.error("Sign in error details:", {
