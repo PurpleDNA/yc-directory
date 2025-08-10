@@ -45,7 +45,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       <section className="section_container">
         <div className="max-w-4xl mx-auto">
           <img
-            src={urlFor(startup.image).url()}
+            src={urlFor(startup.image).url() || startup.image_url}
             alt="thumbnail"
             className="w-full h-auto max-h-[400px] rounded-xl"
           />
