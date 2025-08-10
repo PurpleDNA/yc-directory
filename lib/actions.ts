@@ -34,24 +34,25 @@ export const createStartup = async (
   form: FormData,
   pitch: string
 ) => {
-  const session = await auth();
-  console.log(session?.id);
-  if (!session) {
-    return parseServerActionResponse({
-      error: "Not signed in",
-      status: "ERROR",
-    });
-  }
-
   const { title, description, category, link } = Object.fromEntries(
     Array.from(form).filter(([key]) => key !== "pitch")
   );
 
+  const image = form.get("image") as File;
+
   const slug = slugify(title as string, { lower: true, strict: true });
 
-  const authorId = session.id;
-
   try {
+    const session = await auth();
+    if (!session) {
+      return parseServerActionResponse({
+        error: "Not signed in",
+        status: "ERROR",
+      });
+    }
+
+    const authorId = session.id;
+
     const startup = {
       title,
       description,
@@ -66,6 +67,7 @@ export const createStartup = async (
         _ref: authorId,
       },
       pitch,
+      image,
     };
 
     const result = await writeClient.create({ _type: "startup", ...startup });
