@@ -47,20 +47,25 @@ const StartupForm = () => {
         image: formData.get("image") as File | null,
       };
 
-      console.log(imageFile);
-      console.log(formData.get("image"));
-
       await formSchema.parseAsync(formValues);
 
       const result = await createStartup(prevState, formData, pitch);
+
       if (result.status === "SUCCESS") {
         toast({
           title: "Success",
           description: "Your Startup Pitch has been created successfully",
         });
         router.push(`/startup/${result._id}`);
+      } else {
+        toast({
+          title: "Error",
+          description: "User is not Logged In",
+          variant: "destructive",
+        });
       }
     } catch (error) {
+      console.log("Error occurred while creating startup:", error);
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
         setErrors(fieldErrors as unknown as Record<string, string>);

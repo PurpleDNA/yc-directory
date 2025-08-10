@@ -36,8 +36,6 @@ const LoginModal = () => {
     // If modal should show but we detect we just came back from OAuth
     if (showModal) {
       const timer = setTimeout(() => {
-        // Simple check: if page has been loaded for a bit and modal is still showing,
-        // user probably returned from OAuth - clean up the URL
         const params = new URLSearchParams(searchParams.toString());
         if (params.has("showLogin")) {
           console.log(
@@ -46,11 +44,11 @@ const LoginModal = () => {
           params.delete("showLogin");
           replace(`${pathname}?${params.toString()}`, { scroll: false });
         }
-      }, 30); // Wait 30 milliseconds after page load
+      }, 30);
 
       return () => clearTimeout(timer);
     }
-  }, []); // Run only on component mount
+  }, []);
 
   // Handle escape key press
   useEffect(() => {
@@ -106,13 +104,10 @@ const LoginModal = () => {
           <button
             className="auth-btn google-btn"
             onClick={async () => {
-              console.log("Google button clicked"); // Debug log
               try {
                 handleCloseModal(); // Close modal before redirect
                 await LogIn("google");
               } catch (error) {
-                console.log("Google login error caught in modal:", error);
-                // If it's a redirect error, don't handle it here
                 if (
                   error instanceof Error &&
                   error.message === "NEXT_REDIRECT"
@@ -147,13 +142,10 @@ const LoginModal = () => {
           <button
             className="auth-btn github-btn"
             onClick={async () => {
-              console.log("GitHub button clicked"); // Debug log
               try {
-                handleCloseModal(); // Close modal before redirect
+                handleCloseModal();
                 await LogIn("github");
               } catch (error) {
-                console.log("GitHub login error caught in modal:", error);
-                // If it's a redirect error, don't handle it here
                 if (
                   error instanceof Error &&
                   error.message === "NEXT_REDIRECT"

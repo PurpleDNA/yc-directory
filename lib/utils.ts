@@ -14,7 +14,9 @@ export function formatDate(date: string) {
 }
 
 export function parseServerActionResponse<T>(response: T) {
-  return JSON.parse(JSON.stringify(response));
+  const parsed = JSON.parse(JSON.stringify(response));
+  console.log("Parsed Server Action Response:", parsed);
+  return parsed;
 }
 
 export function pagination<T>(array: T[]) {

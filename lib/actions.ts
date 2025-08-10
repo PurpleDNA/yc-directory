@@ -25,7 +25,6 @@ export const getAuthorId = async (id: string) => {
     throw new Error(`Author with id ${id} not found`);
   }
 
-  console.log(author._id);
   return author._id; // Return just the _id string
 };
 
@@ -34,13 +33,20 @@ export const createStartup = async (
   form: FormData,
   pitch: string
 ) => {
-  const { title, description, category, link } = Object.fromEntries(
+  console.log("This is the formData nigga>>>>>>", form);
+
+  const { title, description, category, image } = Object.fromEntries(
     Array.from(form).filter(([key]) => key !== "pitch")
   );
-
-  const image = form.get("image") as File;
+  console.log("The array.fromEnteries Bullshit>>>>>>>", {
+    title,
+    description,
+    category,
+    image,
+  });
 
   const slug = slugify(title as string, { lower: true, strict: true });
+  const link = "https://avatars.githubusercontent.com/u/138164488?v=4";
 
   try {
     const session = await auth();
