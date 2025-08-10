@@ -73,7 +73,8 @@ export const STARTUPS_BY_USER_QUERY =
     _id,name,image,bio,id
   },
   views, 
-  category
+  category,
+  image
 }`);
 
 export const PLAYLIST_BY_SLUG_QUERY =

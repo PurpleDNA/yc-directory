@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { auth } from "@/auth";
@@ -18,18 +17,18 @@ import { redirect } from "next/navigation";
 export const getAuthorId = async (id: string) => {
   const nId = Number(id);
   const author = await client.fetch(FETCH_AUTHOR_USER_ID, {
-    id: nId, // Match the parameter name in the query
+    id: nId,
   });
 
   if (!author) {
     throw new Error(`Author with id ${id} not found`);
   }
 
-  return author._id; // Return just the _id string
+  return author._id;
 };
 
-export const createStartup = async (
-  state: any,
+export const createStartup = async <T>(
+  state: T,
   form: FormData,
   pitch: string
 ) => {
