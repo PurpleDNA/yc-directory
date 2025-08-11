@@ -3,7 +3,7 @@ import { STARTUPS_BY_USER_QUERY } from "@/sanity/lib/query";
 import React from "react";
 import StartupCard from "./StartupCard";
 
-const UserStartups = async ({ id }: { id: number }) => {
+const UserStartups = async ({ id }: { id: string }) => {
   const startups = await client.fetch(STARTUPS_BY_USER_QUERY, { id });
   return (
     <>

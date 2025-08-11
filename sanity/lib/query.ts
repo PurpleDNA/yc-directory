@@ -31,6 +31,16 @@ export const FETCH_STARTUP_BY_ID =
   image
   }`);
 
+export const FETCH_AUTHOR_BY_ID =
+  defineQuery(`*[_type == "author" && _id == $id][0]{
+  _id, 
+  name, 
+  username,
+  image,
+  bio,
+  email
+  }`);
+
 export const FETCH_AUTHOR_USER_ID =
   defineQuery(`*[_type == "author" && id == $id][0]{
   _id
@@ -63,14 +73,14 @@ export const AUTHOR_BY_OAUTH_EMAIL_QUERY =
   }`);
 
 export const STARTUPS_BY_USER_QUERY =
-  defineQuery(`*[_type == "startup" && defined(slug.current) && author->id == $id] | order(_createdAt desc){
+  defineQuery(`*[_type == "startup" && defined(slug.current) && author->_id == $id] | order(_createdAt desc){
   _id,
   title, 
   description,
   slug,
   _createdAt, 
   author -> {
-    _id,name,image,bio,id
+    _id,name,image,bio
   },
   views, 
   category,

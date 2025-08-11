@@ -70,7 +70,9 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 </p>
               </div>
             </Link>
-            <p className="category-tag">{startup.category}</p>
+            <Link href={`/?query=${startup.category}`}>
+              <p className="category-tag">{startup.category}</p>
+            </Link>
           </div>
           <h3 className="text-30-bold">Pitch Details</h3>
           {parsed_result ? (
