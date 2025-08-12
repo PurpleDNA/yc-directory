@@ -38,7 +38,7 @@ const shuffled = shuffleArray(startupData);
 //   "E-commerce",
 // ];
 
-const accessKey = "bP_rwv2CkSIdYHPOEupdIy_zOZ-vu1qOro7Yc5wWJUo";
+const accessKey = process.env.UNSPLASH_ACCESS_KEY;
 
 if (!accessKey) {
   throw new Error("UNSPLASH_ACCESS_KEY environment variable is not set");

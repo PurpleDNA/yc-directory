@@ -110,3 +110,19 @@ export const PLAYLIST_BY_SLUG_QUERY =
     pitch
   }
 }`);
+
+export const STARTUP_BY_CATEGORY = defineQuery(
+  `*[_type == "startup" && category == $category && _id != $id]{
+    _id,
+  title, 
+  description,
+  slug,
+  _createdAt, 
+  author -> {
+    _id,name,image,bio
+  },
+  views,
+  category,
+  image
+}`
+);

@@ -1,11 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { Suspense } from "react";
 import { client } from "@/sanity/lib/client";
-import {
-  FETCH_STARTUP_BY_ID,
-  // PLAYLIST_BY_SLUG_QUERY,
-} from "@/sanity/lib/query";
-// import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
+import { FETCH_STARTUP_BY_ID, STARTUP_BY_CATEGORY } from "@/sanity/lib/query";
+import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
 import { notFound } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
@@ -23,9 +20,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const [startup] = await Promise.all([
     client.fetch(FETCH_STARTUP_BY_ID, {
       id,
-    }),
+    }) as Promise<StartupTypeCard>,
   ]);
   if (!startup) notFound();
+
+  const similar = await client.fetch(STARTUP_BY_CATEGORY, {
+    category: startup?.category,
+    id,
+  });
 
   const md = markdownit();
   const parsed_result = md.render(startup?.pitch || "");
@@ -45,7 +47,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       <section className="section_container">
         <div className="max-w-4xl mx-auto">
           <img
-            src={urlFor(startup.image).url()}
+            src={
+              startup.image
+                ? urlFor(startup.image).url()
+                : "https://placehold.co/600x400"
+            }
             alt="thumbnail"
             className="w-full h-auto max-h-[400px] rounded-xl"
           />
@@ -85,17 +91,17 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           )}
         </div>
         <hr className="didvide" />
-        {/* {editorPosts?.length > 0 && (
+        {similar?.length > 0 && (
           <div className="max-w-4xl mx-auto">
-            <p className="text-30-semibold">Editor Picks</p>
+            <p className="text-30-semibold">More like this</p>
 
             <ul className="mt-7 card_grid-sm">
-              {editorPosts.map((post: StartupTypeCard, i: number) => (
+              {similar.map((post: StartupTypeCard, i: number) => (
                 <StartupCard key={i} post={post} />
               ))}
             </ul>
           </div>
-        )} */}
+        )}
         <Suspense fallback={<Skeleton className="view_skeleton" />}>
           <View id={id} />
         </Suspense>
