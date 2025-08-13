@@ -44,18 +44,15 @@ const Navbar = ({ session }: { session: Session | null }) => {
                   size={30}
                 />
               </Link>
-              <form action={LogOut}>
-                <button
-                  type="submit"
-                  className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100 hidden md:block cursor-pointer"
-                >
+              <div onClick={LogOut}>
+                <button className="font-bold py-1 px-2 bg-[#EE2B69] rounded-sm text-white-100 hidden md:block cursor-pointer">
                   Logout
                 </button>
                 <LogOutIcon
                   className="md:hidden p-1 rounded-full bg-[#EE2B69] text-white cursor-pointer"
                   size={30}
                 />
-              </form>
+              </div>
               <Link href={`/user/${session?.id}`} prefetch={true}>
                 <Image
                   alt="user image"
